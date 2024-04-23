@@ -38,7 +38,7 @@ dependencies {
     annotationProcessor("jakarta.annotation:jakarta.annotation-api")
 
     // maria db 및 security 설정
-//    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'javax.validation:validation-api:2.0.1.Final'
     implementation 'com.auth0:java-jwt:3.14.0'
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
