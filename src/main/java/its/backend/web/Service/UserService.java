@@ -32,7 +32,7 @@ public class UserService {
             throw new BaseException(BAD_REQUEST);
         }
 
-        if (!isRegexUserId(signUpReq.getUserId())) {
+        if (!isRegexUserId(signUpReq.getUserid())) {
             throw new BaseException(INVALID_USER_ID_FORMAT);
         }
 
@@ -50,7 +50,7 @@ public class UserService {
 
         // 2. 아이디 중복 검사 및 비밀번호 암호화
         // 아이디 중복 검사
-        if (userRepository.findByUserId(signUpReq.getUserId()).isPresent()) {
+        if (userRepository.findByUserId(signUpReq.getUserid()).isPresent()) {
             throw new BaseException(INVALID_USER_ID_DUPLICATE);
         }
 
@@ -66,12 +66,13 @@ public class UserService {
 
         try {
             User newUser = User.builder()
-                    .userId(signUpReq.getUserId())
+                    .userId(signUpReq.getUserid())
                     .password(signUpReq.getPassword())
-                    .userName(signUpReq.getUserName())
-                    .userNick(signUpReq.getUserNick())
+                    .userName(signUpReq.getUsername())
+                    .userNick(signUpReq.getUsernick())
                     .birth(signUpReq.getBirth())
                     .email(signUpReq.getEmail())
+                    .phone(signUpReq.getPhone())
                     .firstLogin(1)
                     .serviceCheck(signUpReq.getServiceCheck())
                     .personalCheck(signUpReq.getPersonalCheck())
@@ -90,6 +91,7 @@ public class UserService {
                     .userNick(newUser.getUserNick())
                     .birth(newUser.getBirth())
                     .email(newUser.getEmail())
+                    .phone(signUpReq.getPhone())
                     .signUpDate(convertTimestampToString(newUser.getCreatedAt()))
                     .smsCheck(newUser.getSmsCheck())
                     .emailCheck(newUser.getEmail_check())
@@ -104,8 +106,8 @@ public class UserService {
 
     public boolean checkIstEmptySignUpByUser(SignUpReq signUpReq) {
         return
-                signUpReq.getUserId().length() == 0 || signUpReq.getPassword().length() == 0 ||
-                        signUpReq.getUserName().length() == 0 || signUpReq.getBirth().length() == 0 ||
+                signUpReq.getUserid().length() == 0 || signUpReq.getPassword().length() == 0 ||
+                        signUpReq.getUsername().length() == 0 || signUpReq.getBirth().length() == 0 ||
                         signUpReq.getEmail().length() == 0 || signUpReq.getPhone().length() == 0;
 
     }

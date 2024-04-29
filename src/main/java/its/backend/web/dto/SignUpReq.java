@@ -10,10 +10,10 @@ import lombok.NoArgsConstructor;
 public class SignUpReq {
 
     // 사용자 정보
-    private String userId;
+    private String userid;
     private String password;
-    private String userName;
-    private String userNick;
+    private String username;
+    private String usernick;
     private String birth;
     private String phone;
     private String email;
