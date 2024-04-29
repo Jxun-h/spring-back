@@ -46,6 +46,10 @@ public class User extends BaseEntity implements UserDetails {
     @ColumnDefault("1")
     private int firstLogin;
 
+    @Column(name = "SERVICE_CHECK", nullable = false)
+    @ColumnDefault("0")
+    private int serviceCheck;
+
     @Column(name = "MENU_REGISTER", nullable = false)
     @ColumnDefault("0")
     private int menu_register;
