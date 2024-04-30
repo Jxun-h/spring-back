@@ -1,17 +1,23 @@
 package its.backend.web.Service;
 
 import its.backend.global.config.error.exception.BaseException;
-import its.backend.web.dto.SignUpReq;
-import its.backend.web.dto.SignUpRes;
+import its.backend.global.security.JwtTokenProvider;
+import its.backend.web.dto.*;
 import its.backend.web.entity.User;
 import its.backend.web.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import static its.backend.global.config.error.ErrorCode.*;
 import static its.backend.global.util.Regex.*;
@@ -23,6 +29,8 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final MemberDetailService memberDetailService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Transactional(rollbackFor = BaseException.class)
     public SignUpRes signUp(SignUpReq signUpReq) throws BaseException {
@@ -102,6 +110,39 @@ public class UserService {
             System.out.println(e);
             throw new BaseException(DATABASE_ERROR);
         }
+    }
+
+    public SignInRes loginUser(SignInReq req) {
+        // 1. 빈 값 확인
+        if (req.getUserid().isEmpty() || req.getPassword().isEmpty()) {
+            throw new BaseException(INVALID_EMPTY_VALUE);
+        }
+
+        // 2-1. UserDetail Data Load
+        UserDetails userDetails = memberDetailService.loadUserByUsername(req.getUserid());
+
+        // 2-2. UserDetail Password Validation
+        if (!checkPassword(req.getPassword(), userDetails.getPassword())) {
+            throw new BaseException(INVALID_NOT_MATCHED_ID_OR_PASSWORD);
+        }
+
+        // 3-1. JWT Token (Access, Refresh)
+        User user = (User) userDetails;
+
+        List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(user.getRole().toString()));
+        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
+        TokenDto token = jwtTokenProvider.generateToken(authentication, user.getUserSeq());
+
+        // 4-1. Login Response
+        return SignInRes.builder()
+                .userName(user.getUsername())
+                .userNick(user.getUserNick())
+                .accessToken(token.toString())
+                .build();
+    }
+
+    public boolean checkPassword(String rawPassword, String encodedPassword) {
+        return passwordEncoder.matches(rawPassword, encodedPassword);
     }
 
     public boolean checkIstEmptySignUpByUser(SignUpReq signUpReq) {

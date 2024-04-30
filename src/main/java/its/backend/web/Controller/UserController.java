@@ -3,6 +3,8 @@ package its.backend.web.Controller;
 import its.backend.global.config.error.exception.BaseException;
 import its.backend.global.response.BaseResponse;
 import its.backend.web.Service.UserService;
+import its.backend.web.dto.SignInReq;
+import its.backend.web.dto.SignInRes;
 import its.backend.web.dto.SignUpReq;
 import its.backend.web.dto.SignUpRes;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +17,7 @@ import static its.backend.global.response.BaseResponseStatus.SUCCESS;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/web")
+@RequestMapping("/api/app")
 public class UserController {
     private final UserService userService;
 
@@ -28,9 +30,15 @@ public class UserController {
         }
     }
 
-    @PostMapping("/signUpUser")
+    @PostMapping("/user/auth/signUp")
     public ResponseEntity<BaseResponse<SignUpRes>> signUp(@RequestBody SignUpReq signUpReq) {
         SignUpRes signUpRes = userService.signUp(signUpReq);
         return ResponseEntity.ok(new BaseResponse<>(signUpRes));
+    }
+
+    @PostMapping("/users/auth/signIn")
+    public ResponseEntity<BaseResponse<SignInRes>> signIn(@RequestBody SignInReq req) {
+        SignInRes signInRes = userService.loginUser(req);
+        return ResponseEntity.ok(new BaseResponse<>(signInRes));
     }
 }
