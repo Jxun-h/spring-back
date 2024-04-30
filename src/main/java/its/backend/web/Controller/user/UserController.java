@@ -1,4 +1,4 @@
-package its.backend.web.Controller;
+package its.backend.web.Controller.user;
 
 import its.backend.global.config.error.exception.BaseException;
 import its.backend.global.response.BaseResponse;
