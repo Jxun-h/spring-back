@@ -3,6 +3,7 @@ package its.backend.web.Service;
 import its.backend.global.config.error.exception.BaseException;
 import its.backend.global.security.JwtTokenProvider;
 import its.backend.web.dto.*;
+import its.backend.web.entity.Role;
 import its.backend.web.entity.User;
 import its.backend.web.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -81,6 +82,7 @@ public class UserService {
                     .birth(signUpReq.getBirth())
                     .email(signUpReq.getEmail())
                     .phone(signUpReq.getPhone())
+                    .role(Role.valueOf(signUpReq.getRole().toString()))
                     .firstLogin(1)
                     .serviceCheck(signUpReq.getServiceCheck())
                     .personalCheck(signUpReq.getPersonalCheck())
@@ -100,6 +102,7 @@ public class UserService {
                     .birth(newUser.getBirth())
                     .email(newUser.getEmail())
                     .phone(signUpReq.getPhone())
+                    .role(newUser.getRole().getKey())
                     .signUpDate(convertTimestampToString(newUser.getCreatedAt()))
                     .smsCheck(newUser.getSmsCheck())
                     .emailCheck(newUser.getEmail_check())

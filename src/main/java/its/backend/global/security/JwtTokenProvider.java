@@ -10,14 +10,14 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import javax.xml.bind.DatatypeConverter;
+import javax.crypto.SecretKey;
 import java.security.Key;
 import java.util.Date;
 import java.util.stream.Collectors;
 
 @Component
 public class JwtTokenProvider {
-    private final Key key;
+    private final SecretKey key;
     private final RedisDao redisDao;
 
     // 유효한 시간을 일주일로 설정
@@ -26,9 +26,9 @@ public class JwtTokenProvider {
     public JwtTokenProvider(@Value("${jwt.secret}") String secretKey, RedisDao redisDao) {
         this.redisDao = redisDao;
 
-        byte[] secretByteKey = DatatypeConverter.parseBase64Binary(secretKey);
+//        byte[] secretByteKey = DatatypeConverter.parseBase64Binary(secretKey);
 
-        this.key = Keys.hmacShaKeyFor(secretByteKey);
+        this.key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     }
 
     public TokenDto generateToken(Authentication authentication, Long userSeq) {
@@ -71,5 +71,10 @@ public class JwtTokenProvider {
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
+    }
+
+    // 키 가져오기
+    public Key getKey() {
+        return key;
     }
 }

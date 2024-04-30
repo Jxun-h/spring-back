@@ -25,6 +25,7 @@ public class SignUpRes {
     private String phone;
     private String email;
     private String signUpDate;
+    private String role;
 
     // 사용자 이용 동의 정보
     private int smsCheck;

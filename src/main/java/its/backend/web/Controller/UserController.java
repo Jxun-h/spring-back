@@ -30,7 +30,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/user/auth/signUp")
+    @PostMapping("/users/auth/signUp")
     public ResponseEntity<BaseResponse<SignUpRes>> signUp(@RequestBody SignUpReq signUpReq) {
         SignUpRes signUpRes = userService.signUp(signUpReq);
         return ResponseEntity.ok(new BaseResponse<>(signUpRes));
