@@ -138,9 +138,10 @@ public class UserService {
 
         // 4-1. Login Response
         return SignInRes.builder()
+                .userId(user.getUserId())
                 .userName(user.getUsername())
                 .userNick(user.getUserNick())
-                .accessToken(token.toString())
+                .accessToken(token)
                 .build();
     }
 

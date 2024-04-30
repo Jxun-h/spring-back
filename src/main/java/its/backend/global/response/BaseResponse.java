@@ -27,17 +27,20 @@ public class BaseResponse<T> {
         this.isSuccess = SUCCESS.isSuccess();
         this.message = SUCCESS.getMessage();
         this.code = SUCCESS.getCode();
+        this.res = res;
     }
 
     public BaseResponse(ErrorCode errorCode) {
         this.isSuccess = false;
         this.message = errorCode.getErrorMsg();
         this.code = errorCode.getCode();
+        this.res = getRes();
     }
 
     public BaseResponse(String message, int code) {
         this.isSuccess = false;
         this.message = message;
         this.code = code;
+        this.res = getRes();
     }
 }

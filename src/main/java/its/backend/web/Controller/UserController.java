@@ -39,6 +39,7 @@ public class UserController {
     @PostMapping("/users/auth/signIn")
     public ResponseEntity<BaseResponse<SignInRes>> signIn(@RequestBody SignInReq req) {
         SignInRes signInRes = userService.loginUser(req);
+
         return ResponseEntity.ok(new BaseResponse<>(signInRes));
     }
 }
