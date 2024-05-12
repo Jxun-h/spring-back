@@ -34,4 +34,9 @@ public class UserController {
 
         return ResponseEntity.ok(new BaseResponse<>(signInRes));
     }
+
+    @PostMapping("users/auth/signOut")
+    public String signOut() {
+        return "login";
+    }
 }
