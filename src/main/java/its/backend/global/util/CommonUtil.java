@@ -5,6 +5,8 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import java.math.BigDecimal;
+import java.security.SecureRandom;
+import java.util.Date;
 
 public class CommonUtil {
     private static final ObjectMapper objectMapper;
@@ -58,4 +60,27 @@ public class CommonUtil {
     /** 자료형 캐스팅 종료 */
 
 
+    /**
+     * 임시 비밀번호 생성
+     * @param pwsize 비밀번호 자릿수
+     * @return
+     */
+    public static String generateTempPassword(int pwsize) {
+        String charSetString = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*";
+        char[] charSet = charSetString.toCharArray();
+
+        StringBuffer stringBuffer = new StringBuffer();
+        SecureRandom secureRandom = new SecureRandom();
+        secureRandom.setSeed(new Date().getTime());
+
+        int index = 0;
+        int length = charSet.length;
+
+        for (int i = 0; i < pwsize; i++) {
+            index = secureRandom.nextInt(length);
+            stringBuffer.append(charSet[index]);
+        }
+
+        return stringBuffer.toString();
+    }
 }
