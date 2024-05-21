@@ -1,5 +1,6 @@
 package its.backend.global.util;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -8,8 +9,10 @@ import java.math.BigDecimal;
 import java.security.SecureRandom;
 import java.util.Date;
 
+@Slf4j
 public class CommonUtil {
     private static final ObjectMapper objectMapper;
+
     static {
         objectMapper = new ObjectMapper();
     }
@@ -24,28 +27,28 @@ public class CommonUtil {
 
     /** 자료형 캐스팅 시작 */
     public static int toInt(Object object) {
-        if(!NumberUtils.isParsable(String.valueOf(object))) {
+        if (!NumberUtils.isParsable(String.valueOf(object))) {
             return 0;
         }
         return NumberUtils.toInt(String.valueOf(object));
     }
 
     public static float toFloat(Object object) {
-        if(!NumberUtils.isCreatable(String.valueOf(object))) {
+        if (!NumberUtils.isCreatable(String.valueOf(object))) {
             return 0f;
         }
         return NumberUtils.toFloat(String.valueOf(object));
     }
 
     public static double toDouble(Object object) {
-        if(!NumberUtils.isCreatable(String.valueOf(object))) {
+        if (!NumberUtils.isCreatable(String.valueOf(object))) {
             return 0d;
         }
         return NumberUtils.toDouble(String.valueOf(object));
     }
 
     public static long toLong(Object object) {
-        if(!NumberUtils.isCreatable(String.valueOf(object))) {
+        if (!NumberUtils.isCreatable(String.valueOf(object))) {
             return 0l;
         }
         return NumberUtils.toLong(String.valueOf(object));
@@ -57,15 +60,30 @@ public class CommonUtil {
         }
         return String.valueOf(object).trim();
     }
-    /** 자료형 캐스팅 종료 */
 
+    public static BigDecimal toDecimal(Object object) { /** object be not null */
+        BigDecimal decimal = null;
+
+        if (object instanceof BigDecimal) {
+            decimal = (BigDecimal) object;
+        } else {
+            decimal = new BigDecimal(object.toString());
+        }
+
+        if (log.isTraceEnabled()) {
+            log.trace("toDecimal()" + String.valueOf(decimal));
+        }
+        return decimal;
+    }
+    /** 자료형 캐스팅 종료 */
 
     /**
      * 임시 비밀번호 생성
-     * @param pwsize 비밀번호 자릿수
+     *
+     * @param pWSize 비밀번호 자릿수
      * @return
      */
-    public static String generateTempPassword(int pwsize) {
+    public static String generateTempPassword(int pWSize) {
         String charSetString = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*";
         char[] charSet = charSetString.toCharArray();
 
@@ -76,11 +94,25 @@ public class CommonUtil {
         int index = 0;
         int length = charSet.length;
 
-        for (int i = 0; i < pwsize; i++) {
+        for (int i = 0; i < pWSize; i++) {
             index = secureRandom.nextInt(length);
             stringBuffer.append(charSet[index]);
         }
 
         return stringBuffer.toString();
     }
+
+    /** 번호 유효성 검증 시작 */
+    public static boolean validateTel(String tel) {
+        return tel.matches("^\\d{2,3}-\\d{3,4}-\\d{4}$");
+    }
+
+    public static boolean validatePh(String ph) {
+        return ph.matches("^01([0|1|6|7|8|9]?)-?([0-9]{3,4})-?([0-9]{4})$");
+    }
+
+    public static boolean validateTelPh(String num) {
+        return validateTel(num) || validatePh(num);
+    }
+    /** 번호 유효성 검증 종료 */
 }
