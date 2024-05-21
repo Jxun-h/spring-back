@@ -21,7 +21,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static its.backend.global.config.error.ErrorCode.*;
-import static its.backend.global.util.Regex.*;
+import static its.backend.global.util.RegexUtil.*;
 
 
 @Service
