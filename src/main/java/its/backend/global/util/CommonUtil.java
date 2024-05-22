@@ -4,10 +4,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.springframework.web.util.UriUtils;
 
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.util.Date;
+import java.util.UUID;
 
 @Slf4j
 public class CommonUtil {
@@ -115,4 +118,17 @@ public class CommonUtil {
         return validateTel(num) || validatePh(num);
     }
     /** 번호 유효성 검증 종료 */
+
+    /** 파일 경로 암/복호화 시작 */
+    public static String encryptPath(String path) {
+        return UriUtils.encode(path, StandardCharsets.UTF_8.toString());
+    }
+    public static String decryptPath(String path) {
+        return UriUtils.decode(path, StandardCharsets.UTF_8.toString());
+    }
+    /** 파일 경로 암/복호화 종료 */
+
+    public static String createUudi() {
+        return UUID.randomUUID().toString();
+    }
 }

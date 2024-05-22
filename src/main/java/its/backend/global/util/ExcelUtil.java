@@ -39,9 +39,13 @@ public class ExcelUtil {
         }
 
         // Get Excel Data Load - XSSF (With Excel Template)
+        // 1. 템플릿 최소화 OR 분할
+            
+        // 2. 부분적인 템플릿만 로드 후 나머지 엑셀데이터는 SXSSF 로 하는 방안
+
 
         // Download Excel Data - SXSSF (Streaming - Out Of Memory Problem Solution)
-        
+
     }
 
     /**

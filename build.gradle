@@ -19,6 +19,9 @@ configurations {
 
 repositories {
     mavenCentral()
+    maven {
+        url 'https://maven.egovframe.go.kr/maven'
+    }
 }
 
 dependencies {
@@ -54,10 +57,21 @@ dependencies {
     // POI
     implementation 'org.apache.poi:poi:3.17'
     implementation 'org.apache.poi:poi-ooxml:3.17'
+    implementation 'org.apache.tika:tika-core:2.7.0'
 
     // etc
     implementation 'org.apache.commons:commons-lang3'
     implementation 'org.codehaus.jackson:jackson-mapper-asl:1.9.13'
+
+    // egovframework
+    implementation 'egovframework.rte:egovframework.rte.fdl.cmmn:3.9.0'
+    implementation ('egovframework.rte:egovframework.rte.ptl.mvc:3.9.0') {
+        exclude(module: 'spring-modules-validation')
+        implementation 'egovframework.rte:spring-modules-validation:0.9'
+    }
+    implementation 'egovframework.rte:egovframework.rte.psl.dataaccess:3.9.0'
+    implementation 'egovframework.rte:egovframework.rte.fdl.idgnr:3.9.0'
+    implementation 'egovframework.rte:egovframework.rte.fdl.property:3.9.0'
 }
 
 // * * * querydsl * * *
