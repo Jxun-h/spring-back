@@ -54,7 +54,7 @@ public class CommonUtil {
         return NumberUtils.toLong(String.valueOf(object));
     }
 
-    public static String toString(Object object) {
+    public static String toStr(Object object) {
         if (ObjectUtils.isEmpty(object)) {
             return "";
         }
