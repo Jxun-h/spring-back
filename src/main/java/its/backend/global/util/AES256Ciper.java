@@ -15,7 +15,7 @@ import java.util.UUID;
 public class AES256Ciper {
     private static volatile AES256Ciper INSTANCE;
 
-    final static String SECRET_KEY = "1q2w3e4r!@#$";
+    final static String SECRET_KEY = "its1108BackendDreamTree!@#";
     static String IV = "";
     final static int ITERATION = 2;
 

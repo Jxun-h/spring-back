@@ -1,5 +1,6 @@
 package its.backend.web.Controller.File;
 
+import its.backend.global.config.PropertiesConfig;
 import its.backend.global.config.StoragePropertiesConfig;
 import its.backend.global.util.FileDownload;
 import its.backend.global.util.FileUpload;
@@ -18,5 +19,7 @@ public class FileController {
     private final StoragePropertiesConfig storagePropertiesConfig;
     private final FileService fileService;
     private final FileUploadUtil fileUploadUtil;
+    private final PropertiesConfig propertiesConfig;
 
+    
 }

@@ -31,13 +31,18 @@ import java.util.zip.ZipOutputStream;
 @Component
 @Slf4j
 public class FileDownload {
-    /** 파일 업로드 루트 디렉터리 경로 */
+    /**
+     * 파일 업로드 루트 디렉터리 경로
+     */
     private String rootDir;
-    /** 암호화 유틸 */
+    /**
+     * 암호화 유틸
+     */
     private AES256Ciper aes256Ciper;
 
     /**
      * 파일 다운로드 생성자
+     *
      * @param storagePropertiesConfig
      */
     public FileDownload(StoragePropertiesConfig storagePropertiesConfig) {
@@ -47,21 +52,23 @@ public class FileDownload {
 
     /**
      * 파일 경로 Decryption
+     *
      * @param encryptFilePath
      * @return
      * @throws StorageException
      */
     public String decryptFilePath(String encryptFilePath) throws StorageException {
         try {
-            return AES256Ciper.decrypt(CommonUtil.decryptPath(encryptFilePath));
+            return aes256Ciper.decrypt(CommonUtil.decryptPath(encryptFilePath));
         } catch (InvalidAlgorithmParameterException | NoSuchPaddingException | IllegalBlockSizeException |
-                    NoSuchAlgorithmException | BadPaddingException | InvalidKeyException e) {
+                 NoSuchAlgorithmException | BadPaddingException | InvalidKeyException e) {
             throw new StorageException("파일 URL 디코딩 중 에러가 발생했습니다.");
         }
     }
 
     /**
      * 파일 리소스 불러오기
+     *
      * @param filePath 파일 경로
      * @return 파일 리소스
      */
@@ -117,6 +124,13 @@ public class FileDownload {
         }
     }
 
+    /**
+     * 리소스 디렉터리 안의 파일 다운로드
+     *
+     * @param path     파일 경로
+     * @param filename 파일명
+     * @return ResponseEntity<Resource> 리소스 응답값
+     */
     public ResponseEntity<Resource> downloadResourceFile(String path, String filename) {
         try {
             String filePath = ResourceUtils.getFile("classpath:" + path + File.separator + filename).getPath();
@@ -131,7 +145,8 @@ public class FileDownload {
     }
 
     /**
-     * 파일 리소스 읽어오기
+     * 파일 리소스 Load
+     *
      * @param filePath 파일 경로
      * @return 파일 리소스
      */
