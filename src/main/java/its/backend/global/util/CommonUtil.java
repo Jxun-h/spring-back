@@ -131,4 +131,8 @@ public class CommonUtil {
     public static String createUudi() {
         return UUID.randomUUID().toString();
     }
+
+    public static String CreateSystemFileName(String originalFilename) {
+        return UUID.randomUUID().toString() + "." + originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
+    }
 }
