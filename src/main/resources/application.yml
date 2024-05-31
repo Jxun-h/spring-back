@@ -21,7 +21,7 @@ spring:
     defer-datasource-initialization: true
 
   datasource:
-    url: jdbc:mariadb://127.0.0.1:3306/demo
+    url: jdbc:mariadb://127.0.0.1:13306/demo
     username: root
     password: gw2157214
     driver-class-name: org.mariadb.jdbc.Driver
