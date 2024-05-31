@@ -49,7 +49,7 @@ public class PropertiesConfig {
     /** 2중 보안 로그인 적용여부 */
     private boolean secondAuth;
     /** 접속가능 아이피 적용여부 */
-    private boolean accessibleConfirmIp;
+    private boolean accessibleIPConfirm;
     /** 중복로그인 적용여부 */
     private boolean duplLogin;
     /**페이지 등록여부 체크*/
@@ -63,8 +63,5 @@ public class PropertiesConfig {
     /**파일업로드 기본 경로*/
     private String basePath;
     /**공지사항 업로드 경로*/
-    private String dirNoti;
-
-    /** batch로 작업되었을 때 수정자 아이디 */
-    private String system;
+    private String dirAnnouncement;
 }
