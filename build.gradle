@@ -75,6 +75,10 @@ dependencies {
     implementation 'egovframework.rte:egovframework.rte.psl.dataaccess:3.9.0'
     implementation 'egovframework.rte:egovframework.rte.fdl.idgnr:3.9.0'
     implementation 'egovframework.rte:egovframework.rte.fdl.property:3.9.0'
+
+    // logback
+    implementation group: 'ch.qos.logback', name: 'logback-core', version: '1.2.9'
+    testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.9'
 }
 
 // * * * querydsl * * *

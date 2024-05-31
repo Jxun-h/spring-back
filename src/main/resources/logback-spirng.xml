@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>%d-{yyyy-MM-dd HH:mm:ss} [%thread][%X{USER_ID}-%X{USER_IP}] %-5level %logger{1}: %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="dailyRollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/om_%d{yyyyMMdd}-%i.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread][%X{USER_ID}-%X{USER_IP}] %-5level %logger{60}: %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="schedulerDailyRollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="com.shopeasy.cm.comm.config.SchedulerLogbakFilter" />
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/om_scheduler_%d{yyyyMMdd}-%i.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread][%X{USER_ID}-%X{USER_IP}] %-5level %logger{60}: %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="lotteInvoiceDailyRollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="com.shopeasy.cm.comm.config.LotteInvoiceLogbakFilter" />
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/om_lotte_invoice_%d{yyyyMMdd}-%i.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread][%X{USER_ID}-%X{USER_IP}] %-5level %logger{60}: %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="jdbc" level="OFF"/>
+    <logger name="jdbc.sqlonly" level="OFF"/>
+    <logger name="jdbc.sqltiming" level="DEBUG"/>
+    <logger name="jdbc.audit" level="OFF"/>
+    <logger name="jdbc.resultset" level="OFF"/>
+    <logger name="jdbc.resultsettable" level="INFO" additivity="false"/>
+    <logger name="jdbc.connection" level="OFF"/>
+
+    <root>
+        <springProfile name="local">
+            <appender-ref ref="STDOUT"/>
+            <appender-ref ref="dailyRollingFileAppender"/>
+            <appender-ref ref="schedulerDailyRollingFileAppender"/>
+            <appender-ref ref="lotteInvoiceDailyRollingFileAppender"/>
+        </springProfile>
+        <springProfile name="dev">
+            <appender-ref ref="STDOUT"/>
+            <appender-ref ref="dailyRollingFileAppender"/>
+            <appender-ref ref="schedulerDailyRollingFileAppender"/>
+            <appender-ref ref="lotteInvoiceDailyRollingFileAppender"/>
+        </springProfile>
+        <springProfile name="demo">
+            <appender-ref ref="STDOUT"/>
+            <appender-ref ref="dailyRollingFileAppender"/>
+            <appender-ref ref="schedulerDailyRollingFileAppender"/>
+            <appender-ref ref="lotteInvoiceDailyRollingFileAppender"/>
+        </springProfile>
+        <springProfile name="prod">
+            <appender-ref ref="STDOUT"/>
+            <appender-ref ref="dailyRollingFileAppender"/>
+            <appender-ref ref="schedulerDailyRollingFileAppender"/>
+            <appender-ref ref="lotteInvoiceDailyRollingFileAppender"/>
+        </springProfile>
+    </root>
+</configuration>
