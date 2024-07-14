@@ -82,7 +82,7 @@ public class UserService {
                     .birth(signUpReq.getBirth())
                     .email(signUpReq.getEmail())
                     .phone(signUpReq.getPhone())
-                    .role(Role.valueOf(signUpReq.getRole().toString()))
+                    .role(Role.valueOf(signUpReq.getRole() == null ? "USER" : "ADMIN"))
                     .firstLogin(1)
                     .serviceCheck(signUpReq.getServiceCheck())
                     .personalCheck(signUpReq.getPersonalCheck())

@@ -33,19 +33,21 @@ public class RegexUtil {
 
     // Validate User Birth
     public static boolean isRegexBirth(String arg) {
-        String regex = "^\\d{4}\\.\\d{2}\\.\\d{2}$";
-        Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(arg);
+        String regexType1 = "^\\d{4}\\.\\d{2}\\.\\d{2}$";
+        String regexType2 = "^\\d{4}\\-\\d{2}\\-\\d{2}$";
+        boolean res1 = Pattern.compile(regexType1, Pattern.CASE_INSENSITIVE).matcher(arg).find();
+        boolean res2 = Pattern.compile(regexType2, Pattern.CASE_INSENSITIVE).matcher(arg).find();
 
-        return matcher.find();
+        return res1 || res2;
     }
 
     // Validate User Phone
     public static boolean isRegexPhone(String arg) {
-        String regex = "^\\d{3}\\d{4}\\d{4}$";
-        Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(arg);
+        String regexType1 = "^\\d{3}\\d{4}\\d{4}$";
+        String regexType2 = "^\\d{3}-\\d{4}-\\d{4}$";
+        boolean res1 = Pattern.compile(regexType1, Pattern.CASE_INSENSITIVE).matcher(arg).find();
+        boolean res2 = Pattern.compile(regexType2, Pattern.CASE_INSENSITIVE).matcher(arg).find();
 
-        return matcher.find();
+        return res1 || res2;
     }
 }
