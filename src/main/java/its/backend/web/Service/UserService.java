@@ -35,45 +35,45 @@ public class UserService {
 
     @Transactional(rollbackFor = BaseException.class)
     public SignUpRes signUp(SignUpReq signUpReq) throws BaseException {
-        // 1. Request 값 검사
-        // 빈 값 여부, 정규식 일치 검사
-        if (checkIstEmptySignUpByUser(signUpReq)) {
-            throw new BaseException(BAD_REQUEST);
-        }
-
-        if (!isRegexUserId(signUpReq.getUserid())) {
-            throw new BaseException(INVALID_USER_ID_FORMAT);
-        }
-
-        if (!isRegexPassword(signUpReq.getPassword())) {
-            throw new BaseException(INVALID_NOT_MATCHED_ID_OR_PASSWORD);
-        }
-
-        if (!isRegexBirth(signUpReq.getBirth())) {
-            throw new BaseException(INVALID_BIRTH_FORMAT);
-        }
-
-        if (!isRegexPhone(signUpReq.getPhone())) {
-            throw new BaseException(INVALID_PHONE_FORMAT);
-        }
-
-        // 2. 아이디 중복 검사 및 비밀번호 암호화
-        // 아이디 중복 검사
-        if (userRepository.findByUserId(signUpReq.getUserid()).isPresent()) {
-            throw new BaseException(INVALID_USER_ID_DUPLICATE);
-        }
-
-        // 패스워드 암호화 -> 사용자 요청값 중 비밀번호 최신화
         try {
+            // 1. Request 값 검사
+            // 빈 값 여부, 정규식 일치 검사
+            if (checkIstEmptySignUpByUser(signUpReq)) {
+                throw new BaseException(BAD_REQUEST, "필수 입력 필드가 비어있습니다. ID, 비밀번호, 이름, 생년월일, 이메일, 전화번호를 모두 입력해주세요.");
+            }
 
+            if (!isRegexUserId(signUpReq.getUserid())) {
+                throw new BaseException(INVALID_USER_ID_FORMAT, 
+                    "ID는 영문자로 시작하고 영문자, 숫자, 밑줄(_)만 사용하여 4~20자 이내로 입력해주세요. (현재 입력: " + signUpReq.getUserid() + ")");
+            }
+
+            if (!isRegexPassword(signUpReq.getPassword())) {
+                throw new BaseException(INVALID_NOT_MATCHED_ID_OR_PASSWORD, 
+                    "비밀번호는 다음 중 하나의 조건을 만족해야 합니다: 1) 8~16자 중 대문자, 소문자, 숫자, 특수문자를 각각 1개 이상 포함, 2) 10~30자 중 영문, 숫자, 특수문자 포함");
+            }
+
+            if (!isRegexBirth(signUpReq.getBirth())) {
+                throw new BaseException(INVALID_BIRTH_FORMAT, 
+                    "생년월일은 YYYY-MM-DD 또는 YYYY.MM.DD 형식으로 입력해주세요. (현재 입력: " + signUpReq.getBirth() + ")");
+            }
+
+            if (!isRegexPhone(signUpReq.getPhone())) {
+                throw new BaseException(INVALID_PHONE_FORMAT, 
+                    "전화번호는 숫자만 11자리 또는 XXX-XXXX-XXXX 형식으로 입력해주세요. (현재 입력: " + signUpReq.getPhone() + ")");
+            }
+
+            // 2. 아이디 중복 검사 및 비밀번호 암호화
+            // 아이디 중복 검사
+            if (userRepository.findByUserId(signUpReq.getUserid()).isPresent()) {
+                throw new BaseException(INVALID_USER_ID_DUPLICATE, 
+                    "이미 사용 중인 아이디입니다. 다른 아이디를 입력해주세요. (중복 아이디: " + signUpReq.getUserid() + ")");
+            }
+
+            // 패스워드 암호화 -> 사용자 요청값 중 비밀번호 최신화
             String encrptPassword = passwordEncoder.encode(signUpReq.getPassword());
             signUpReq.setPassword(encrptPassword);
 
-        } catch (Exception e) {
-            throw new BaseException(INTERNAL_SERVER_ERROR);
-        }
-
-        try {
+            // 3. 사용자 생성
             User newUser = User.builder()
                     .userId(signUpReq.getUserid())
                     .password(signUpReq.getPassword())
@@ -87,15 +87,16 @@ public class UserService {
                     .serviceCheck(signUpReq.getServiceCheck())
                     .personalCheck(signUpReq.getPersonalCheck())
                     .smsCheck(signUpReq.getSmsCheck())
-                    .email_check(signUpReq.getEmailCheck())
+                    .emailCheck(signUpReq.getEmailCheck())
                     .callCheck(signUpReq.getCallCheck())
+                    .menu_register(0)
                     .build();
 
-            // User Data Insert
+            // 4. User Data Insert
             newUser = userRepository.save(newUser);
 
-            // User Data Return
-            SignUpRes checkUser = SignUpRes.builder()
+            // 5. User Data Return
+            return SignUpRes.builder()
                     .userId(newUser.getUserId())
                     .userName(newUser.getUsername())
                     .userNick(newUser.getUserNick())
@@ -105,12 +106,17 @@ public class UserService {
                     .role(newUser.getRole().getKey())
                     .signUpDate(convertTimestampToString(newUser.getCreatedAt()))
                     .smsCheck(newUser.getSmsCheck())
-                    .emailCheck(newUser.getEmail_check())
+                    .emailCheck(newUser.getEmailCheck())
                     .callCheck(newUser.getCallCheck())
                     .build();
-            return checkUser;
+        } catch (BaseException e) {
+            throw e;
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
+            System.out.println("회원가입 중 오류 발생: " + e.getMessage());
+            if (e.getCause() != null) {
+                System.out.println("원인: " + e.getCause().getMessage());
+            }
             throw new BaseException(DATABASE_ERROR);
         }
     }
@@ -151,10 +157,12 @@ public class UserService {
 
     public boolean checkIstEmptySignUpByUser(SignUpReq signUpReq) {
         return
-                signUpReq.getUserid().length() == 0 || signUpReq.getPassword().length() == 0 ||
-                        signUpReq.getUsername().length() == 0 || signUpReq.getBirth().length() == 0 ||
-                        signUpReq.getEmail().length() == 0 || signUpReq.getPhone().length() == 0;
-
+                signUpReq.getUserid() == null || signUpReq.getUserid().length() == 0 ||
+                signUpReq.getPassword() == null || signUpReq.getPassword().length() == 0 ||
+                signUpReq.getUsername() == null || signUpReq.getUsername().length() == 0 ||
+                signUpReq.getBirth() == null || signUpReq.getBirth().length() == 0 ||
+                signUpReq.getEmail() == null || signUpReq.getEmail().length() == 0 ||
+                signUpReq.getPhone() == null || signUpReq.getPhone().length() == 0;
     }
 
     public String convertTimestampToString(LocalDateTime localDateTime) {

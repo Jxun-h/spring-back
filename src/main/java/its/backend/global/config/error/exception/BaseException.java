@@ -1,11 +1,19 @@
 package its.backend.global.config.error.exception;
 
 import its.backend.global.config.error.ErrorCode;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@AllArgsConstructor
 @Getter
 public class BaseException extends RuntimeException {
-    ErrorCode errorCode;
+    private final ErrorCode errorCode;
+    private String detailMessage;
+
+    public BaseException(ErrorCode errorCode) {
+        this.errorCode = errorCode;
+    }
+
+    public BaseException(ErrorCode errorCode, String detailMessage) {
+        this.errorCode = errorCode;
+        this.detailMessage = detailMessage;
+    }
 }
