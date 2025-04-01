@@ -18,7 +18,7 @@ import java.util.Collections;
 @AllArgsConstructor
 @Builder
 @DynamicInsert
-@Table(name = "USER")
+@Table(name = "USERS")
 public class User extends BaseEntity implements UserDetails {
 
     @Id
@@ -72,7 +72,7 @@ public class User extends BaseEntity implements UserDetails {
 
     @Column(name = "EMAIL_CHECK", nullable = false)
     @ColumnDefault("0")
-    private int email_check;
+    private int emailCheck;
 
     @Column(name = "CALL_CHECK", nullable = false)
     @ColumnDefault("0")

@@ -20,9 +20,9 @@ public class SignUpReq {
     private String role;
 
     // 사용자 이용 동의 정보
-    private int serviceCheck;
-    private int personalCheck;
-    private int smsCheck;
-    private int emailCheck;
-    private int callCheck;
+    private int serviceCheck = 0;
+    private int personalCheck = 0;
+    private int smsCheck = 0;
+    private int emailCheck = 0;
+    private int callCheck = 0;
 }
