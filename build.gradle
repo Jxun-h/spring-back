@@ -14,6 +14,8 @@ java {
 configurations {
     all {
         exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+        exclude group: 'javax.servlet', module: 'servlet-api'
+        exclude group: 'javax.servlet', module: 'javax.servlet-api'
     }
     compileOnly {
         extendsFrom annotationProcessor
@@ -30,6 +32,9 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-configuration-processor'
+    
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -43,11 +48,13 @@ dependencies {
     annotationProcessor("jakarta.persistence:jakarta.persistence-api")
     annotationProcessor("jakarta.annotation:jakarta.annotation-api")
 
-    // maria db 및 security 설정
+    // security 설정
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'javax.validation:validation-api:2.0.1.Final'
     implementation 'com.auth0:java-jwt:3.14.0'
-    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+    
+    // 데이터베이스
+    runtimeOnly 'com.mysql:mysql-connector-j'
 
     // jwt
     implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'
@@ -62,23 +69,17 @@ dependencies {
     implementation 'org.apache.poi:poi-ooxml:3.17'
     implementation 'org.apache.tika:tika-core:2.7.0'
 
-    // etc
+    // commons 및 유틸리티
     implementation 'org.apache.commons:commons-lang3'
+    implementation 'com.google.guava:guava:31.1-jre'
     implementation 'org.codehaus.jackson:jackson-mapper-asl:1.9.13'
-
-    // egovframework
-    implementation 'egovframework.rte:egovframework.rte.fdl.cmmn:3.9.0'
-    implementation ('egovframework.rte:egovframework.rte.ptl.mvc:3.9.0') {
-        exclude(module: 'spring-modules-validation')
-        implementation 'egovframework.rte:spring-modules-validation:0.9'
-    }
-    implementation 'egovframework.rte:egovframework.rte.psl.dataaccess:3.9.0'
-    implementation 'egovframework.rte:egovframework.rte.fdl.idgnr:3.9.0'
-    implementation 'egovframework.rte:egovframework.rte.fdl.property:3.9.0'
 
     // logback
     implementation group: 'ch.qos.logback', name: 'logback-core', version: '1.2.9'
     testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.9'
+    
+    // 명시적으로 서블릿 API 버전 지정
+    implementation 'javax.servlet:javax.servlet-api:4.0.1'
 }
 
 // * * * querydsl * * *
