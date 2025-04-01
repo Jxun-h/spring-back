@@ -2,7 +2,7 @@ package its.backend.global.util;
 
 import its.backend.global.config.StoragePropertiesConfig;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.MapUtils;
+import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -52,7 +52,7 @@ public class FileUploadUtil {
 
         Map fileMap = multipartRequest.getFileMap();
 
-        if (MapUtils.isEmpty(fileMap)) {
+        if (fileMap == null || fileMap.isEmpty()) {
             return null;
         }
 
